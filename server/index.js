@@ -6,7 +6,8 @@ import mongoose from "mongoose";
 
 import {jwtVerifyMiddleware, checkRoleMiddleware} from "./middlewares/auth.js";
 import { postLogin, postSignup } from "./controllers/user.js";
-import { postProducts } from "./controllers/product.js";
+import { postProducts , getProducts} from "./controllers/product.js";
+import { postOrder } from "./controllers/order.js";
 
 const app = express();
 app.use(cors());
@@ -32,6 +33,10 @@ app.post("/login", postLogin);
 
 // product api`s
 app.post("/products",jwtVerifyMiddleware , checkRoleMiddleware ,postProducts);
+app.get("/products" , getProducts)
+
+// orders api`s
+app.post("/orders",jwtVerifyMiddleware ,postOrder);
 
 app.listen(PORT, () => {
   console.log(`server is running on port ${PORT}✅`);

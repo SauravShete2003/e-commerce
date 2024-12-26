@@ -42,20 +42,43 @@ const postProducts = async (req, res) => {
     category,
     tags,
   });
-  try{
-    const savedProduct = await product.save()
+  try {
+    const savedProduct = await product.save();
     res.status(201).json({
-        message: "Product created successfully",
-        success: true,
-        data : savedProduct
-        });
-  } catch(err){
+      message: "Product created successfully",
+      success: true,
+      data: savedProduct,
+    });
+  } catch (err) {
     res.status(400).json({
-        message: "Error creating product",
-        success: false,
-        error: err.message
-        });
+      message: "Error creating product",
+      success: false,
+      error: err.message,
+    });
   }
 };
 
-export { postProducts };
+const getProducts = async (req, res) => {
+  const { limit, search } = req.query;
+  const products = await Product.find({
+    name: {
+      $regex: new RegExp(search || ""),
+      $options: "i",
+    },
+    shortDescription: {
+      $regex: new RegExp(search || ""),
+      $options: "i",
+    },
+    longDescription: {
+      $regex: new RegExp(search || ""),
+      $options: "i",
+    },
+  }).limit(parseInt(limit || 10));
+  res.status(200).json({
+    message: "Products retrieved successfully",
+    success: true,
+    data: products,
+  });
+};
+
+export { postProducts, getProducts };
