@@ -4,17 +4,19 @@ import dotenv from "dotenv";
 dotenv.config();
 import mongoose from "mongoose";
 
-import {jwtVerifyMiddleware, checkRoleMiddleware} from "./middlewares/auth.js";
+import {
+  jwtVerifyMiddleware,
+  checkRoleMiddleware,
+} from "./middlewares/auth.js";
 import { postLogin, postSignup } from "./controllers/user.js";
-import { postProducts , getProducts} from "./controllers/product.js";
-import { postOrder } from "./controllers/order.js";
+import { postProducts, getProducts } from "./controllers/product.js";
+import { postOrder, putOrders } from "./controllers/order.js";
 
 const app = express();
 app.use(cors());
 app.use(express.json());
 const PORT = 5000 || process.env.PORT;
 const MONGO_URL = process.env.MONGO_URL;
-
 
 (async () => {
   const conn = await mongoose.connect(MONGO_URL);
@@ -32,11 +34,12 @@ app.post("/signup", postSignup);
 app.post("/login", postLogin);
 
 // product api`s
-app.post("/products",jwtVerifyMiddleware , checkRoleMiddleware ,postProducts);
-app.get("/products" , getProducts)
+app.post("/products", jwtVerifyMiddleware, checkRoleMiddleware, postProducts);
+app.get("/products", jwtVerifyMiddleware, getProducts);
 
 // orders api`s
-app.post("/orders",jwtVerifyMiddleware ,postOrder);
+app.post("/orders", jwtVerifyMiddleware, postOrder);
+app.put("/orders/:id", jwtVerifyMiddleware , putOrders);
 
 app.listen(PORT, () => {
   console.log(`server is running on port ${PORT}✅`);

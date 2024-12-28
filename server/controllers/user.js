@@ -3,7 +3,7 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
 const postSignup = async (req, res) => {
-  const { name, password, rePassword, email, phone, address } = req.body;
+  const { name, password, rePassword, email, phone, address , role} = req.body;
   if (!name || !password || !rePassword || !email || !phone || !address) {
     return res.status(400).json({ message: "Please fill all the fields" });
   }
@@ -20,6 +20,7 @@ const postSignup = async (req, res) => {
     email,
     phone,
     address,
+    role
   });
   try {
     const savedUser = await user.save();

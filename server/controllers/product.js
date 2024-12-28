@@ -10,6 +10,7 @@ const postProducts = async (req, res) => {
     currentPrice,
     category,
     tags,
+    status
   } = req.body;
 
   const mandatoryField = [
@@ -41,6 +42,7 @@ const postProducts = async (req, res) => {
     currentPrice,
     category,
     tags,
+    status
   });
   try {
     const savedProduct = await product.save();
