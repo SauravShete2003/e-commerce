@@ -1,5 +1,5 @@
 import Order from "./../models/Order.js";
-import mongoose from "mongoose"; 
+import mongoose from "mongoose";
 
 const postOrder = async (req, res) => {
   const { products, deliveryAddress, phone, paymentMethod } = req.body;
@@ -45,7 +45,10 @@ const putOrders = async (req, res) => {
       return res.status(404).json({ message: "Order not found" });
     }
 
-    if (user.role === "user" && order.userId.toString() !== user._id.toString()) {
+    if (
+      user.role === "user" &&
+      order.userId.toString() !== user._id.toString()
+    ) {
       return res
         .status(403)
         .json({ message: "You can only update your own orders" });
@@ -65,12 +68,16 @@ const putOrders = async (req, res) => {
         await order.save();
       }
     }
+    
+    if (req.body.phone) {
+      order.phone = req.body.phone;
+    }
 
     if (user.role === "admin") {
       order.status = req.body.status;
       order.timeline = req.body.timeline;
-      await order.save();
     }
+    await order.save();
 
     const updateOrder = await Order.findById(id);
 
