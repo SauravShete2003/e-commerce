@@ -1,4 +1,5 @@
 import Order from "./../models/Order.js";
+import mongoose from "mongoose"; 
 
 const postOrder = async (req, res) => {
   const { products, deliveryAddress, phone, paymentMethod } = req.body;
@@ -32,6 +33,10 @@ const putOrders = async (req, res) => {
   const { id } = req.params;
   console.log("Order ID:", id);
 
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(400).json({ message: "Invalid order ID format" });
+  }
+
   try {
     const order = await Order.findById(id);
     console.log("Order Found:", order);
@@ -40,14 +45,12 @@ const putOrders = async (req, res) => {
       return res.status(404).json({ message: "Order not found" });
     }
 
-    // Check user role and ownership
     if (user.role === "user" && order.userId.toString() !== user._id.toString()) {
       return res
         .status(403)
         .json({ message: "You can only update your own orders" });
     }
 
-    // User trying to cancel the order
     if (
       user.role === "user" &&
       req.body.status === "cancelled" &&
@@ -63,7 +66,6 @@ const putOrders = async (req, res) => {
       }
     }
 
-    // Admin updating the order
     if (user.role === "admin") {
       order.status = req.body.status;
       order.timeline = req.body.timeline;
@@ -80,6 +82,5 @@ const putOrders = async (req, res) => {
     return res.status(400).json({ message: "Error updating order" });
   }
 };
-
 
 export { postOrder, putOrders };
