@@ -28,12 +28,9 @@ const postOrder = async (req, res) => {
 
 const putOrders = async (req, res) => {
   const user = req.user;
-  console.log("User:", user);
-
   const { id } = req.params;
-  console.log("Order ID:", id);
 
-  if (!mongoose.Types.ObjectId.isValid(id)) {
+  if (!id) {
     return res.status(400).json({ message: "Invalid order ID format" });
   }
 

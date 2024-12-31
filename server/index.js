@@ -11,6 +11,7 @@ import {
 import { postLogin, postSignup } from "./controllers/user.js";
 import { postProducts, getProducts } from "./controllers/product.js";
 import { postOrder, putOrders } from "./controllers/order.js";
+import { postPayment } from "./controllers/payment.js";
 
 const app = express();
 app.use(cors());
@@ -40,6 +41,9 @@ app.get("/products", jwtVerifyMiddleware, getProducts);
 // orders api`s
 app.post("/orders", jwtVerifyMiddleware, postOrder);
 app.put("/orders/:id", jwtVerifyMiddleware , putOrders);
+
+// payment api`s
+app.post("/payments", postPayment)
 
 app.listen(PORT, () => {
   console.log(`server is running on port ${PORT}✅`);
