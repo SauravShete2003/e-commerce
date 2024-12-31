@@ -1,29 +1,7 @@
 import Order from "./../models/Order.js";
-import mongoose from "mongoose";
+import { responder } from "../utils/utils.js";
 
-const postOrder = async (req, res) => {
-  const { products, deliveryAddress, phone, paymentMethod } = req.body;
-  if (!products || !deliveryAddress || !phone || !paymentMethod) {
-    return res.status(400).json({ message: "Please fill in all fields" });
-  }
-  let totalBill = 0;
-  products.forEach((products) => {
-    totalBill += products.price * products.quantity;
-  });
-  try {
-    const order = new Order({
-      userId: req.user._id,
-      products,
-      totalBill,
-      deliveryAddress,
-      phone,
-      paymentMethod,
-    });
-    const savedOrder = await order.save();
-    res.status(201).json(savedOrder);
-  } catch (error) {
-    res.status(400).json({ message: "Error creating order" });
-  }
+const postOrders = async (req, res) => {
 };
 
 const putOrders = async (req, res) => {
@@ -65,7 +43,7 @@ const putOrders = async (req, res) => {
         await order.save();
       }
     }
-    
+
     if (req.body.phone) {
       order.phone = req.body.phone;
     }
@@ -87,4 +65,64 @@ const putOrders = async (req, res) => {
   }
 };
 
-export { postOrder, putOrders };
+const getOrderById = async (req, res) => {
+  const user = req.user;
+  const { id } = req.params;
+
+  let order;
+
+  try {
+    order = await Order.findById(id)
+      .populate("userId", "name email")
+      .populate(
+        "products.productId",
+        "-shortDescription -longDescription -image -category -tags -__v -createdAt -updatedAt"
+      )
+      .populate("paymentId", "-__v -createdAt -updatedAt");
+
+    if (!order) {
+      return responder(res, false, "Order not found", null, 404);
+    }
+  } catch (error) {
+    return responder(res, false, error.message, null, 400);
+  }
+
+  if (user._id != order.userId && user.role != "admin") {
+    return responder(
+      res,
+      false,
+      "You are not authorized to view this order",
+      null,
+      401
+    );
+  }
+
+  return responder(res, true, "Order fetched successfully", order, 200);
+};
+
+const getOrdersByUserId = async (req, res) => {
+  const { id } = req.params;
+  const user = req.user;
+
+  if (user.role != "admin" && user._id != id) {
+    return responder(
+      res,
+      false,
+      "You are not authorized to view this orders",
+      null,
+      401
+    );
+  }
+
+  const orders = await Order.find({ userId: id })
+    .populate("userId", "name email")
+    .populate(
+      "products.productId",
+      "-shortDescription -longDescription -image -category -tags -__v -createdAt -updatedAt"
+    )
+    .populate("paymentId", "-__v -createdAt -updatedAt");
+
+  return responder(res, true, "Orders fetched successfully", orders, 200);
+};
+
+export { postOrders, putOrders, getOrderById, getOrdersByUserId };

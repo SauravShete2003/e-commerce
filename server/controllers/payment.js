@@ -1,41 +1,56 @@
-import Order from "../models/Order.js";
+import Order from "./../models/Order.js";
 import Payment from "./../models/Payment.js";
 
-const postPayment = async (req, res) => {
-  const { orderId, amount, status, paymentMode, transactionId } = req.body;
+const postPayments = async (req, res) => {
+  const { orderId, amount, paymentMode, status, transactionId } = req.body;
+
   let order;
+
   try {
     order = await Order.findById(orderId);
-    if (!order) {
-      return res.status(404).json({ message: "Order not found" });
-    }
-    if (["delivered", "cancelled"].includes(order.status.toLowerCase())) {
-      return res
-        .status(400)
-        .json({ message: "Order is already delivered or cancelled" });
-    }
-    const payment = new Payment({
-      amount,
-      status,
-      paymentMode,
-      transactionId,
+  } catch (error) {
+    return res.status(400).json({ success: false, message: error.message });
+  }
+
+  if (!order) {
+    return res.status(404).json({
+      success: false,
+      message: "This order does not exist",
     });
+  }
+
+  if (["delivered", "cancelled"].includes(order.status.toLowerCase())) {
+    return res.status(400).json({
+      success: false,
+      message: `This order has already been ${order.status}`,
+    });
+  }
+
+  const payment = new Payment({
+    paymentMode,
+    amount,
+    transactionId,
+    status,
+  });
+
+  try {
     const savedPayment = await payment.save();
-    order.payment = savedPayment._id;
+
+    order.paymentId = savedPayment._id;
     order.paymentMode = paymentMode;
-    order.timeline.push({ status: "Payment Compeleted", date: Date.now() });
+
+    order.timeline.push({ status: "Payment Completed", date: Date.now() });
+
     await order.save();
 
-    res.status(201).json({
-      message: "Payment created successfully",
+    return res.json({
+      success: true,
+      message: "Payment successful",
       data: savedPayment,
     });
   } catch (error) {
-    res.status(500).json({
-      message: "Failed to create payment",
-      error: error.message,
-    });
+    return res.status(400).json({ success: false, message: error.message });
   }
 };
 
-export { postPayment };
+export { postPayments };
