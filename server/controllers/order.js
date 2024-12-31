@@ -2,6 +2,40 @@ import Order from "./../models/Order.js";
 import { responder } from "../utils/utils.js";
 
 const postOrders = async (req, res) => {
+  const { products, deliveryAddress, phone, paymentMode } = req.body;
+
+  if (!products || !deliveryAddress || !phone || !paymentMode) {
+    return responder(
+      res,
+      false,
+      `products, totalBill, deliveryAddress, phone, paymentMode are required`,
+      null,
+      400
+    );
+  }
+
+  let totalBill = 0;
+
+  products.forEach((product) => {
+    totalBill += product.price * product.quantity;
+  });
+
+  try {
+    const newOrder = new Order({
+      userId: req.user._id,
+      products,
+      totalBill,
+      deliveryAddress,
+      phone,
+      paymentMode,
+    });
+
+    const savedOrder = await newOrder.save();
+
+    return responder(res, true, "Order placed successfully", savedOrder, 201);
+  } catch (error) {
+    return responder(res, false, error.message, null, 400);
+  }
 };
 
 const putOrders = async (req, res) => {
