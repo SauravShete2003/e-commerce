@@ -2,12 +2,18 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import "./index.css";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import Signup from "./views/Signup";
+import Home from "./views/Home";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 const router = createBrowserRouter ([
   {
     path: "/",
-    element: <h1 className="bg-slate-500 font-bold text-2xl">Hello </h1>
+    element: <Home/>
+  },
+  {
+    path: "/signup",
+    element: <Signup/>
   },
   {
     path: "*",
