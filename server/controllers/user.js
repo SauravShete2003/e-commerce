@@ -4,8 +4,23 @@ import jwt from "jsonwebtoken";
 
 const postSignup = async (req, res) => {
   const { name, password, rePassword, email, phone, address , role} = req.body;
-  if (!name || !password || !rePassword || !email || !phone || !address) {
-    return res.status(400).json({ message: "Please fill all the fields" });
+  if (!name){
+    return res.status(400).json({ message: "Name is required" });
+  }
+  if (!email) {
+    return res.status(400).json({ message: "Email is required" });
+  }
+  if (!phone) {
+    return res.status(400).json({ message: "Phone is required" });
+  }
+  if (!address) {
+    return res.status(400).json({ message: "Address is required" });
+  }
+  if (!password) {
+    return res.status(400).json({ message: "Password is required" });
+  }
+  if (!rePassword) {
+    return res.status(400).json({ message: "Confirm Password is required" });
   }
   if (password !== rePassword) {
     return res
@@ -25,7 +40,7 @@ const postSignup = async (req, res) => {
   try {
     const savedUser = await user.save();
     res.status(201).json({
-      message: "User created successfully",
+      message: "User created successfully Please Login!",
       data: {
         name: savedUser.name,
         email: savedUser.email,
@@ -34,6 +49,13 @@ const postSignup = async (req, res) => {
       },
     });
   } catch (error) {
+    console.log(error.keyValue);
+    if (error.message.includes("duplicate key error")) {
+      return res.status(400).json({
+        succeess: false,
+        message:`${Object.keys(error.keyValue)} '${Object.values(error.keyValue)}' already exists`,
+      })
+    }
     res.status(400).json({ message: error.message, succeess: false });
   }
 };
