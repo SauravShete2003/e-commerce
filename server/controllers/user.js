@@ -79,7 +79,7 @@ const postLogin = async (req, res) => {
     { expiresIn: "1h" }
   );
   res.setHeader("Authorization" , `Bearer ${token}`);
-  res.json({ message: "Login Successfull", data: { token } });
+  res.json({ message: "Login Successful", data : user , token});
 
 };
 export { postSignup, postLogin };
