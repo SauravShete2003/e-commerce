@@ -14,6 +14,7 @@ function Button({ label, onClick, variant }) {
       "bg-red-500 hover:bg-red-600 text-white font-bold shadow-md hover:shadow-lg",
     success:
       "bg-green-500 hover:bg-green-600 text-white font-bold shadow-md hover:shadow-lg",
+    logout:"text-xl"
   };
 
   const COMMON_STYLES =

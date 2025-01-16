@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { getCurrentuser } from "../utils/common";
 import { User, Mail, UserCircle, LogOut } from "lucide-react";
 import toast from "react-hot-toast";
+import Button from "../components/Button";
 
 function Dashboard() {
   const [user, setUser] = useState({
@@ -23,6 +24,15 @@ function Dashboard() {
       }, 2000);
     }
   }, []);
+   
+  const logOut = () => {
+    localStorage.removeItem("e-commerce-user-token");
+    localStorage.removeItem("e-commerce-user-details");
+    toast.success("Logged Out Successfully");
+    setTimeout(() => {
+      window.location.href = "/login";
+    });
+  };
   return (
     <div>
       <h1 className="text-3xl font-bold text-gray-800 mb-8">
@@ -47,10 +57,11 @@ function Dashboard() {
             <p className="text-lg capitalize">{user.role}</p>
           </div>
         </div>
-        <button className="mt-8 w-full bg-gradient-to-r from-blue-500 to-purple-600 text-white py-3 px-6 rounded-lg font-semibold transform transition-all duration-300 hover:from-blue-600 hover:to-purple-700 hover:shadow-md flex items-center justify-center space-x-2">
-          <LogOut className="w-5 h-5" />
-          <span>Logout</span>
-        </button>
+        <div className="mt-6 w-full bg-gradient-to-r from-blue-500 to-purple-600 text-white py-1 px-4 rounded-lg font-semibold transform transition-all duration-300 hover:from-blue-600 hover:to-purple-700 hover:shadow-md flex items-center justify-center space-x-2">
+        <LogOut className="w-7 h-7" />
+        <Button label="Logout" variant="logout" onClick={logOut} />
+        </div>
+
       </div>
     </div>
   );
