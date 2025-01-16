@@ -6,6 +6,7 @@ import Signup from "./views/Signup";
 import Home from "./views/Home";
 import Login from "./views/Login";
 import Dashboard from "./views/Dashboard";
+import UserOrder from "./views/UserOrder";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 const router = createBrowserRouter ([
@@ -26,12 +27,16 @@ const router = createBrowserRouter ([
     element: <Dashboard/>
   },
   {
+    path: "/user-orders",
+    element: <UserOrder/>
+  },
+  {
     path: "*",
     element: <div>404</div>
   }
 ])
 root.render(
-  <div className="min-h-screen bg-gradient-to-br from-purple-100 via-blue-100 to-green-100 flex flex-col items-center justify-center p-4">
+  <div className="min-h-screen bg-gradient-to-br from-purple-100 via-blue-100 to-green-100">
     <RouterProvider router={router} />
   </div>
 )

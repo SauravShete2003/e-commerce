@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { getCurrentuser } from "../utils/common";
-import { User, Mail, UserCircle, LogOut } from "lucide-react";
+import { User, Mail, UserCircle, LogOut, Truck } from "lucide-react";
 import toast from "react-hot-toast";
 import Button from "../components/Button";
+import {Link} from 'react-router-dom';
 
 function Dashboard() {
   const [user, setUser] = useState({
@@ -38,7 +39,25 @@ function Dashboard() {
       <h1 className="text-3xl font-bold text-gray-800 mb-8">
         Welcome to Your Dashboard
       </h1>
-      <div className="bg-white p-8 rounded-2xl shadow-lg w-full max-w-md transform transition-all duration-300 hover:scale-105">
+      <div className="bg-white p-8 rounded-2xl shadow-lg transform transition-all duration-300 hover:scale-105 ">
+      <div className="flex items-center justify-between mb-4 bg-black text-white p-2 rounded-lg">
+        <Link to='/user-orders' className="p-1">
+         <Truck className="w-9 h-9 text-blue-500 inline" />
+         <span className="text-md font-semibold text-blue-500 ">
+          My Orders
+          </span>
+        </Link>
+        <Link to='/user-orders' className="p-1">
+         <Truck className="w-9 h-9 text-blue-500 inline" />
+         <span className="text-md font-semibold text-blue-500 ">
+          My Orders
+          </span>
+        </Link>
+        <Link to='/orders' className="p-1">
+         <Truck className="w-9 h-9 text-blue-500 inline" />
+         <span className="text-md font-semibold text-blue-500 ">My Orders</span>
+        </Link>
+      </div>
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-2xl font-semibold text-gray-700">User Profile</h2>
           <UserCircle className="w-10 h-10 text-blue-500" />
