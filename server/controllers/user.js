@@ -70,16 +70,23 @@ const postLogin = async (req, res) => {
     return res.status(400).json({ message: "Invalid Email or Password" });
   }
   const isValidPassword = await bcrypt.compare(password, user.password);
+
+  const userDetails =  {
+     id: user._id, 
+     email: user.email , 
+     role : user.role , 
+     _id : user._id,
+     name : user.name,
+    }
+
   if (!isValidPassword) {
     return res.status(400).json({ message: "Invalid Email or Password" });
   }
-  const token = jwt.sign(
-    { id: user._id, email: user.email , role : user.role , _id : user._id},
-    process.env.SECRET_KEY,
-    { expiresIn: "1h" }
-  );
+  const token = jwt.sign( userDetails,process.env.SECRET_KEY,{ expiresIn: "1h" });
+  
   res.setHeader("Authorization" , `Bearer ${token}`);
-  res.json({ message: "Login Successful", data : user , token});
+
+  res.json({ message: "Login Successful", data : userDetails , token});
 
 };
 export { postSignup, postLogin };
