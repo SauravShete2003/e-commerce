@@ -26,11 +26,21 @@ const postPayments = async (req, res) => {
     });
   }
 
+  const validStatuses = ["success", "failed"];
+  const normalizedStatus = status.toLowerCase();
+
+  if (!validStatuses.includes(normalizedStatus)) {
+    return res.status(400).json({
+      success: false,
+      message: `Invalid status value. Allowed values are: ${validStatuses.join(", ")}`,
+    });
+  }
+
   const payment = new Payment({
     paymentMode,
     amount,
     transactionId,
-    status,
+    status: normalizedStatus,
   });
 
   try {
@@ -39,18 +49,24 @@ const postPayments = async (req, res) => {
     order.paymentId = savedPayment._id;
     order.paymentMode = paymentMode;
 
-    order.timeline.push({ status: "Payment Completed", date: Date.now() });
+    if (normalizedStatus === "success") {
+      order.timeline.push({ status: "Payment Completed", date: Date.now() });
+    } else {
+      order.timeline.push({ status: "Payment Failed", date: Date.now() });
+    }
 
     await order.save();
 
     return res.json({
       success: true,
-      message: "Payment successful",
+      message: normalizedStatus === "success" ? "Payment successful" : "Payment failed",
       data: savedPayment,
     });
   } catch (error) {
+    console.error("Payment Save Error:", error.message);
     return res.status(400).json({ success: false, message: error.message });
   }
 };
+
 
 export { postPayments };

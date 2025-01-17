@@ -15,7 +15,8 @@ const paymentSchema = new Schema({
   },
   status: {
     type: String,
-    default : "pending"
+    enum: ["success", "failed"],
+    default: "success",
   },
 },{
     timestamps: true,

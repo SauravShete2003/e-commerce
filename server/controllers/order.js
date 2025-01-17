@@ -2,9 +2,9 @@ import Order from "./../models/Order.js";
 import { responder } from "../utils/utils.js";
 
 const postOrders = async (req, res) => {
-  const { products, deliveryAddress, phone, paymentMode } = req.body;
+  const { products, deliveryAddress, phone, paymentMethod } = req.body;
 
-  if (!products || !deliveryAddress || !phone || !paymentMode) {
+  if (!products || !deliveryAddress || !phone || !paymentMethod) {
     return responder(
       res,
       false,
@@ -27,7 +27,7 @@ const postOrders = async (req, res) => {
       totalBill,
       deliveryAddress,
       phone,
-      paymentMode,
+      paymentMethod,
     });
 
     const savedOrder = await newOrder.save();

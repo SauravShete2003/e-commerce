@@ -44,11 +44,11 @@ function UserOrder() {
 
   return (
     <div>
-      <h1>My Order</h1>
-      <p>
+      <h1 className="text-center text-3xl font-bold p-2">My Order</h1>
+      <p className="text-center text-lg font-semibold p-2">
         Current User : {user.name} {user.email}
       </p>
-      <div>
+      <div className="flex flex-wrap justify-center">
         {orders?.map((order) => {
           return <OrderCard key={order._id} order={order} />;
         })}

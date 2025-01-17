@@ -32,7 +32,7 @@ function Dashboard() {
     toast.success("Logged Out Successfully");
     setTimeout(() => {
       window.location.href = "/login";
-    });
+    },2000);
   };
   return (
     <div className="container mx-auto px-4 py-8 w-full max-w-2xl">
