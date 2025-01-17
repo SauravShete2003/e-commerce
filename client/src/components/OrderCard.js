@@ -13,4 +13,4 @@ function OrderCard({ order }) {
   )
 }
 
-export default OrderCard
+export default OrderCard;

@@ -36,7 +36,7 @@ const router = createBrowserRouter ([
   }
 ])
 root.render(
-  <div className="min-h-screen bg-gradient-to-br from-purple-100 via-blue-100 to-green-100">
+  <div className="min-h-screen bg-gradient-to-br from-purple-500 to-indigo-600">
     <RouterProvider router={router} />
   </div>
 )

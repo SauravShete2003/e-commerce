@@ -44,51 +44,58 @@ function Login() {
   } , []);
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-centersm:px-6 lg:px-8">
-      <h1 className="text-3xl font-bold text-white mb-6">Login</h1>
-      <form className="w-full max-w-[600px] p-8 bg-white rounded-lg shadow-lg">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-500 to-indigo-600 px-4 sm:px-6 lg:px-8">
+    <div className="max-w-md w-full space-y-8">
+      <div>
+        <h2 className="mt-6 text-center text-3xl font-extrabold text-white">Sign in to your account</h2>
+      </div>
+      <form className="mt-8 space-y-6 bg-white p-8 rounded-xl shadow-2xl">
         <Input
-          label={"Email"}
+          label="Email address"
           type="email"
           placeholder="Enter your email"
           val={loginData.email}
-          onChange={(val) =>
-            setLoginData({ ...loginData, email: val }, setError(""))
-          }
+          onChange={(val) => setLoginData({ ...loginData, email: val }, setError(""))}
         />
         <Input
-          label={"Password"}
+          label="Password"
           type="password"
           placeholder="Enter your password"
           val={loginData.password}
-          onChange={(val) =>
-            setLoginData({ ...loginData, password: val }, setError(""))
-          }
+          onChange={(val) => setLoginData({ ...loginData, password: val }, setError(""))}
         />
-        <p className="text-red-500 text-sm">{error}</p>
-        <p>
-          Don't have an account?{" "}
-          <Link
-            to="/signup" className="text-blue-500 hover:text-blue-700 font-semibold">Signup
-          </Link>
-        </p>
-        <div className="flex justify-between mt-6">
+        {error && <p className="text-red-500 text-sm">{error}</p>}
+        <div className="flex items-center justify-between">
+          <div className="text-sm">
+            <Link href="/forgot-password" className="font-medium text-indigo-600 hover:text-indigo-500">
+              Forgot your password?
+            </Link>
+          </div>
+        </div>
+        <div className="mt-8 flex flex-col space-y-4">
           <Button
-            label={"Cancel"}
-            onClick={() => {
-              window.location.href = "/";
-            }}
-            variant={"warning"}
-          />
-          <Button
-            label={"Login"}
+            label="Sign in"
             onClick={processLogin}
-            variant={"primary"}
+            variant="primary"
+            className="w-full"
           />
+          <Button
+          label="Cancel"
+          onClick={() => (window.location.href = "/")}
+          variant="warning"
+          className="w-full"
+        />
         </div>
       </form>
-      <Toaster />
+      <p className="mt-2 text-center text-sm text-white">
+        Don't have an account?{" "}
+        <Link to="/signup" className="font-medium text-indigo-200 hover:text-indigo-100">
+          Sign up
+        </Link>
+      </p>
     </div>
+    <Toaster />
+  </div>
   );
 }
 

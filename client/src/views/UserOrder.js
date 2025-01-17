@@ -26,7 +26,6 @@ function UserOrder() {
 
   useEffect(() => {
     const user = getCurrentuser();
-    console.log(user);
     if (user) {
       setUser(user);
     } else {

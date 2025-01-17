@@ -51,86 +51,79 @@ function Signup() {
   } , []);
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center py-4 px-4 sm:px-6 lg:px-8">
-      <h1 className="text-3xl font-bold text-white mb-6">Signup</h1>
-      <form className="w-full max-w-[600px] p-8 bg-white rounded-lg shadow-lg">
+    <div className="min-h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8">
+    <div className="max-w-md w-full space-y-8">
+      <div>
+        <h2 className="mt-4  text-center text-3xl font-extrabold text-white">Create your account</h2>
+      </div>
+      <form className="mt-8 space-y-6 bg-white p-8 rounded-xl shadow-2xl">
         <Input
-          label={"Name"}
+          label="Name"
           type="text"
           placeholder="Enter your name"
           val={signupData.name}
-          onChange={(val) =>
-            setSignupData({ ...signupData, name: val }, setError(""))
-          }
+          onChange={(val) => setSignupData({ ...signupData, name: val }, setError(""))}
         />
         <Input
-          label={"Email"}
+          label="Email address"
           type="email"
           placeholder="Enter your email"
           val={signupData.email}
-          onChange={(val) =>
-            setSignupData({ ...signupData, email: val }, setError(""))
-          }
+          onChange={(val) => setSignupData({ ...signupData, email: val }, setError(""))}
         />
         <Input
-          label={"Phone"}
-          type="number"
+          label="Phone"
+          type="tel"
           placeholder="Enter your phone number"
           val={signupData.phone}
-          onChange={(val) =>
-            setSignupData({ ...signupData, phone: val }, setError(""))
-          }
+          onChange={(val) => setSignupData({ ...signupData, phone: val }, setError(""))}
         />
         <Input
-          label={"Address"}
+          label="Address"
           type="text"
           placeholder="Enter your address"
           val={signupData.address}
-          onChange={(val) =>
-            setSignupData({ ...signupData, address: val }, setError(""))
-          }
+          onChange={(val) => setSignupData({ ...signupData, address: val }, setError(""))}
         />
         <Input
-          label={"Password"}
+          label="Password"
           type="password"
           placeholder="Enter your password"
           val={signupData.password}
-          onChange={(val) =>
-            setSignupData({ ...signupData, password: val }, setError(""))
-          }
+          onChange={(val) => setSignupData({ ...signupData, password: val }, setError(""))}
         />
         <Input
-          label={"Re-enter Password"}
+          label="Confirm Password"
           type="password"
           placeholder="Re-enter your password"
           val={signupData.rePassword}
-          onChange={(val) =>
-            setSignupData({ ...signupData, rePassword: val }, setError(""))
-          }
+          onChange={(val) => setSignupData({ ...signupData, rePassword: val }, setError(""))}
         />
-        <p className="text-red-500 text-sm">{error}</p>
-        <p>Already have an account?{" "}
-          <Link
-            to="/login" className="text-blue-500 hover:text-blue-700 font-semibold">Login
-          </Link>
-        </p>
-        <div className="flex justify-between mt-6">
+        {error && <p className="text-red-500 text-sm">{error}</p>}
+        <div className="mt-8 flex flex-col space-y-4">
           <Button
-            label={"Cancel"}
-            onClick={() => {
-              window.location.href = "/";
-            }}
-            variant={"warning"}
-          />
-          <Button
-            label={"Signup"}
+            label="Sign up"
             onClick={processSignup}
-            variant={"primary"}
+            variant="primary"
+            className="w-full"
           />
+          <Button
+          label="Cancel"
+          onClick={() => (window.location.href = "/")}
+          variant="warning"
+          className="w-full"
+        />
         </div>
       </form>
-      <Toaster />
+      <p className="mt-2 text-center text-sm text-white">
+        Already have an account?{" "}
+        <Link to="/login" className="font-medium text-indigo-200 hover:text-indigo-100">
+          Sign in
+        </Link>
+      </p>
     </div>
+    <Toaster />
+  </div>
   );
 }
 
